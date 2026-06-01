@@ -1,38 +1,44 @@
-type ActorId = actor_id;
-type Tier = enum {
-  Bronze,
-  Silver,
-  Gold,
+constructor {
+  New : ();
 };
-type ReputationScore = record {
-  target: ActorId,
+
+service Reputation {
+  mut QueryScore : (target: actor_id) -> result (ReputationScore, VaultError);
+  query GetScore : (target: actor_id) -> ReputationScore;
+  query GetFee : () -> u128;
+  query GetAccumulatedFees : () -> u128;
+};
+
+service Voucher {
+  mut Vouch : (target: actor_id) -> result (u64, VaultError);
+  query GetVouchers : (target: actor_id) -> vec actor_id;
+  query GetVoucherCount : (target: actor_id) -> u64;
+};
+
+service Admin {
+  mut SetFee : (new_fee: u128) -> result (u128, VaultError);
+  mut Withdraw : (amount: u128) -> result (u128, VaultError);
+  query GetOwner : () -> actor_id;
+};
+
+type ReputationScore = struct {
+  target: actor_id,
   score: u8,
   tier: Tier,
   voucher_count: u64,
   calls_seen: u64,
 };
+
+type Tier = enum {
+  Bronze,
+  Silver,
+  Gold,
+};
+
 type VaultError = enum {
-  InsufficientPayment : record { required: u128, sent: u128 },
+  InsufficientPayment: struct { required: u128, sent: u128 },
   AlreadyVouched,
   Unauthorized,
   InvalidAmount,
   InsufficientFunds,
-};
-
-service VaraVault {
-  // Reputation service
-  query_score : (target: ActorId) -> result(ReputationScore, VaultError);
-  get_score : (target: ActorId) -> ReputationScore;
-  get_fee : () -> u128;
-  get_accumulated_fees : () -> u128;
-
-  // Voucher service
-  vouch : (target: ActorId) -> result(u64, VaultError);
-  get_vouchers : (target: ActorId) -> vec ActorId;
-  get_voucher_count : (target: ActorId) -> u64;
-
-  // Admin service
-  set_fee : (new_fee: u128) -> result(u128, VaultError);
-  withdraw : (amount: u128) -> result(u128, VaultError);
-  get_owner : () -> ActorId;
 };
