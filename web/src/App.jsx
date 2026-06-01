@@ -11,116 +11,151 @@ const EXAMPLES = [
   { label: 'aan-tv-data', id: '0xec8f2b2ecb27ea82bfe7565bf981db1749a61fc27558e80ae575eadf34530e5c' },
 ];
 
-const NETWORK_AGENTS = [
-  { name: 'varabridge', id: '0xfb7ed5a79dc2ff15283a524a4489321b5e1f6341db2b9892be83b9568cc1fcb4' },
-  { name: 'a2a-radar', id: '0xee23c4ceb17d501c6bf3906da9a9c147f4fa96bf25acb6f06da9e451c4462af3' },
-  { name: 'aan-tv-data', id: '0xec8f2b2ecb27ea82bfe7565bf981db1749a61fc27558e80ae575eadf34530e5c' },
-];
-
-const TIER_COLOR = { Bronze: '#d4a574', Silver: '#a8b5c4', Gold: '#ffd700' };
+const TIER_COLORS = { Bronze: '#d4a574', Silver: '#a8b5c4', Gold: '#ffd700' };
 const TIER_CLASS = { Bronze: 'text-[#d4a574]', Silver: 'text-[#a8b5c4]', Gold: 'text-yellow-300' };
-const TIER_BG = { Bronze: 'bg-[#d4a574]/10', Silver: 'bg-[#a8b5c4]/10', Gold: 'bg-yellow-400/10' };
+const TIER_BG = { Bronze: 'bg-[#d4a574]/15', Silver: 'bg-[#a8b5c4]/15', Gold: 'bg-yellow-400/15' };
+
+function AnimatedGradientBg() {
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-vara/20 rounded-full blur-3xl animate-pulse opacity-30" />
+      <div className="absolute top-1/2 right-1/4 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-pulse opacity-20" style={{ animationDelay: '1s' }} />
+      <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-pulse opacity-25" style={{ animationDelay: '2s' }} />
+    </div>
+  );
+}
 
 function ScoreRing({ score, tier }) {
-  const r = 52, c = 2 * Math.PI * r, off = c - (score / 100) * c;
+  const r = 60, c = 2 * Math.PI * r, off = c - (score / 100) * c;
   return (
-    <div className="relative w-40 h-40">
-      <svg viewBox="0 0 120 120" className="w-full h-full -rotate-90">
-        <circle cx="60" cy="60" r={r} fill="none" stroke="#1f2937" strokeWidth="10" />
-        <circle cx="60" cy="60" r={r} fill="none" strokeWidth="10" strokeLinecap="round"
-          style={{ stroke: TIER_COLOR[tier] || '#00a8e0' }}
-          strokeDasharray={c} strokeDashoffset={off}
-          style={{ transition: 'stroke-dashoffset 1s ease', filter: 'drop-shadow(0 0 8px ' + (TIER_COLOR[tier] || '#00a8e0') + ')' }} />
+    <div className="relative w-56 h-56 animate-float">
+      <div className="absolute inset-0 rounded-full" style={{
+        background: `radial-gradient(circle at 30% 30%, ${TIER_COLORS[tier]}20, transparent)`,
+        filter: `drop-shadow(0 0 30px ${TIER_COLORS[tier]}40)`,
+      }} />
+      <svg viewBox="0 0 140 140" className="w-full h-full -rotate-90" style={{ filter: `drop-shadow(0 0 20px ${TIER_COLORS[tier]}60)` }}>
+        <circle cx="70" cy="70" r={r} fill="none" stroke="#1a1f2e" strokeWidth="12" />
+        <circle cx="70" cy="70" r={r} fill="none" strokeWidth="12" strokeLinecap="round"
+          style={{
+            stroke: TIER_COLORS[tier],
+            strokeDasharray: c,
+            strokeDashoffset: off,
+            filter: `drop-shadow(0 0 15px ${TIER_COLORS[tier]})`,
+            transition: 'stroke-dashoffset 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          }} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-5xl font-bold">{score}</span>
-        <span className={`text-sm font-semibold ${TIER_CLASS[tier] || ''}`}>{tier}</span>
+        <span className="text-6xl font-black" style={{ color: TIER_COLORS[tier] }}>{score}</span>
+        <span className={`text-lg font-bold tracking-widest ${TIER_CLASS[tier]}`}>{tier}</span>
       </div>
     </div>
   );
 }
 
-function Stat({ label, value, sub }) {
+function GlassCard({ children, className = '' }) {
   return (
-    <div className="rounded-xl bg-white/5 border border-white/10 p-4 hover:border-white/20 transition">
-      <div className="text-xs uppercase tracking-wide text-gray-400">{label}</div>
-      <div className="text-2xl font-bold mt-1">{value}</div>
-      {sub && <div className="text-xs text-gray-500 mt-0.5">{sub}</div>}
+    <div className={`rounded-2xl bg-white/8 border border-white/15 backdrop-blur-xl p-6 hover:border-white/25 transition-all duration-500 hover:shadow-2xl ${className}`}
+      style={{ boxShadow: '0 8px 32px rgba(0, 168, 224, 0.1)' }}>
+      {children}
     </div>
+  );
+}
+
+function AnimatedStat({ label, value, sub, icon }) {
+  return (
+    <GlassCard className="relative overflow-hidden group">
+      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-vara/30 to-transparent rounded-bl-3xl -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-500" />
+      <div className="relative z-10">
+        <div className="text-xs uppercase tracking-widest text-gray-400 font-semibold">{label}</div>
+        <div className="text-3xl font-black mt-2" style={{ background: 'linear-gradient(135deg, #00a8e0, #00d9ff)', backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent' }}>
+          {value}
+        </div>
+        {sub && <div className="text-xs text-gray-500 mt-1">{sub}</div>}
+        {icon && <div className="text-2xl mt-2">{icon}</div>}
+      </div>
+    </GlassCard>
   );
 }
 
 function SimulatorSlider({ label, value, onChange, max = 20 }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <div className="flex justify-between">
-        <label className="text-sm font-semibold">{label}</label>
-        <span className="text-var font-bold text-lg">{value}</span>
+        <label className="text-sm font-bold tracking-wide">{label}</label>
+        <span className="text-2xl font-black text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">{value}</span>
       </div>
       <input type="range" min="0" max={max} value={value} onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-2 bg-white/10 rounded-full appearance-none cursor-pointer accent-vara" />
+        className="w-full h-3 bg-white/10 rounded-full appearance-none cursor-pointer accent-vara transition-all hover:accent-cyan-400"
+        style={{
+          background: `linear-gradient(to right, #00a8e0 0%, #00a8e0 ${(value/max)*100}%, rgba(255,255,255,0.1) ${(value/max)*100}%, rgba(255,255,255,0.1) 100%)`,
+        }} />
     </div>
   );
 }
 
-function NetworkMap() {
+function ParticleNetwork() {
   return (
-    <div className="relative h-64 rounded-xl bg-white/5 border border-white/10 p-6 overflow-hidden">
-      <svg className="absolute inset-0 w-full h-full" style={{ pointerEvents: 'none' }}>
+    <div className="relative h-72 rounded-2xl bg-gradient-to-b from-white/5 to-transparent border border-white/10 p-8 overflow-hidden">
+      <svg className="absolute inset-0 w-full h-full opacity-40" preserveAspectRatio="none">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <circle cx="50%" cy="50%" r="80" fill="none" stroke="url(#grad1)" strokeWidth="2" opacity="0.3" />
+        <circle cx="50%" cy="50%" r="120" fill="none" stroke="url(#grad2)" strokeWidth="1" opacity="0.2" />
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#00a8e0" />
+            <stop offset="100%" stopColor="#00d9ff" />
+          </linearGradient>
+          <linearGradient id="grad2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#00d9ff" />
+            <stop offset="100%" stopColor="#00a8e0" />
+          </linearGradient>
+        </defs>
+        {/* Network nodes */}
+        <g filter="url(#glow)">
+          <circle cx="20%" cy="50%" r="8" fill="#00a8e0" opacity="0.6" className="animate-pulse" />
+          <circle cx="50%" cy="30%" r="10" fill="#00d9ff" opacity="0.7" />
+          <circle cx="80%" cy="50%" r="8" fill="#00a8e0" opacity="0.6" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
+          <circle cx="50%" cy="70%" r="9" fill="#00d9ff" opacity="0.65" />
+        </g>
         {/* Connection lines */}
-        <line x1="50%" y1="50%" x2="20%" y2="50%" stroke="rgba(0,168,224,0.3)" strokeWidth="2" />
-        <line x1="50%" y1="50%" x2="80%" y2="50%" stroke="rgba(0,168,224,0.3)" strokeWidth="2" />
-        <line x1="50%" y1="50%" x2="50%" y2="20%" stroke="rgba(0,168,224,0.3)" strokeWidth="2" />
+        <line x1="50%" y1="50%" x2="20%" y2="50%" stroke="#00a8e0" strokeWidth="2" opacity="0.3" />
+        <line x1="50%" y1="50%" x2="50%" y2="30%" stroke="#00d9ff" strokeWidth="2" opacity="0.3" />
+        <line x1="50%" y1="50%" x2="80%" y2="50%" stroke="#00a8e0" strokeWidth="2" opacity="0.3" />
+        <line x1="50%" y1="50%" x2="50%" y2="70%" stroke="#00d9ff" strokeWidth="2" opacity="0.3" />
       </svg>
-      <div className="relative h-full flex items-center justify-between px-8">
-        <div className="text-center">
-          <div className="w-16 h-16 rounded-full bg-vara/20 border-2 border-vara flex items-center justify-center mx-auto mb-2">
-            <span className="text-sm font-bold">a2a-radar</span>
-          </div>
-          <span className="text-xs text-gray-400">Attestations</span>
-        </div>
-        <div className="text-center">
-          <div className="w-20 h-20 rounded-full bg-white/10 border-2 border-white flex items-center justify-center mx-auto mb-2">
-            <span className="text-xs font-bold">VaraVault</span>
-          </div>
-          <span className="text-xs text-gray-400">Meta Oracle</span>
-        </div>
-        <div className="text-center">
-          <div className="w-16 h-16 rounded-full bg-vara/20 border-2 border-vara flex items-center justify-center mx-auto mb-2">
-            <span className="text-sm font-bold">aan-tv</span>
-          </div>
-          <span className="text-xs text-gray-400">Analytics</span>
-        </div>
+      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center">
+        <div className="text-5xl font-black mb-2">🌐</div>
+        <h3 className="text-xl font-bold mb-1">Meta-Oracle Network</h3>
+        <p className="text-sm text-gray-400">VaraVault aggregates trust signals from across the ecosystem</p>
       </div>
-      <div className="text-center mt-4 text-xs text-gray-500">varabridge (market data) at bottom</div>
     </div>
   );
 }
 
-function ActivityFeed() {
-  const [activities] = useState([
-    { type: 'query', agent: 'varabridge', time: 'now' },
-    { type: 'vouch', agent: 'a2a-radar', actor: 'jmadhan', time: '2m ago' },
-    { type: 'call', from: 'aan-tv-data', to: 'VaraVault', time: '5m ago' },
-    { type: 'board', agent: 'VaraVault', msg: 'Reputation oracle live', time: '1h ago' },
-    { type: 'query', agent: 'a2a-radar', time: '2h ago' },
-  ]);
-
+function LeaderboardRow({ rank, agent, score, tier, calls, vouchers }) {
   return (
-    <div className="space-y-2">
-      {activities.map((a, i) => (
-        <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-white/20 transition text-sm">
-          <div className="w-2 h-2 rounded-full bg-vara animate-pulse" />
-          <span className="flex-1">
-            {a.type === 'query' && <>Query score for <span className="font-semibold text-vara">{a.agent}</span></>}
-            {a.type === 'vouch' && <><span className="font-semibold">{a.actor}</span> vouched for <span className="text-vara">{a.agent}</span></>}
-            {a.type === 'call' && <><span className="text-vara">{a.from}</span> → <span className="text-vara">{a.to}</span></>}
-            {a.type === 'board' && <><span className="text-vara">{a.agent}</span>: "{a.msg}"</>}
-          </span>
-          <span className="text-xs text-gray-500">{a.time}</span>
-        </div>
-      ))}
-    </div>
+    <tr className="hover:bg-white/5 transition-all duration-300 border-b border-white/5 last:border-0 hover:shadow-lg hover:shadow-vara/20">
+      <td className="px-6 py-4 font-black text-lg" style={{ color: TIER_COLORS[tier] }}>#{rank}</td>
+      <td className="px-6 py-4 font-bold text-white">{agent}</td>
+      <td className="px-6 py-4 text-right">
+        <span className="font-black text-xl" style={{ color: TIER_COLORS[tier] }}>{score}</span>
+      </td>
+      <td className="px-6 py-4 text-center">
+        <span className={`px-3 py-1 rounded-full font-bold text-sm ${TIER_BG[tier]} ${TIER_CLASS[tier]}`}>
+          {tier}
+        </span>
+      </td>
+      <td className="px-6 py-4 text-right text-gray-400 font-semibold">{calls}</td>
+      <td className="px-6 py-4 text-right text-gray-400 font-semibold">{vouchers}</td>
+    </tr>
   );
 }
 
@@ -134,12 +169,8 @@ export default function App() {
   const [err, setErr] = useState('');
   const [fee, setFee] = useState(null);
   const [accrued, setAccrued] = useState(null);
-
-  // Simulator state
-  const [calls, setCalls] = useState(5);
-  const [vouchCount, setVouchCount] = useState(3);
-
-  // Leaderboard state
+  const [calls, setCalls] = useState(8);
+  const [vouchCount, setVouchCount] = useState(5);
   const [leaderboard, setLeaderboard] = useState([]);
   const [leaderLoading, setLeaderLoading] = useState(true);
 
@@ -152,23 +183,20 @@ export default function App() {
         setFee(await getFee());
         setAccrued(await getAccumulatedFees());
         await lookup(PROGRAM_ID);
-
-        // Load leaderboard
         const leader = await getLeaderboard(EXAMPLES.map(e => e.id));
         setLeaderboard(leader);
         setLeaderLoading(false);
       } catch (e) {
         setConn('error');
-        setErr('Could not connect to Vara RPC: ' + e.message);
+        setErr('Connection failed: ' + e.message);
         setLeaderLoading(false);
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function lookup(id) {
     const q = (id || target || '').trim();
-    if (!/^0x[0-9a-fA-F]{64}$/.test(q)) { setErr('Enter a valid 0x… 32-byte actor id'); return; }
+    if (!/^0x[0-9a-fA-F]{64}$/.test(q)) { setErr('Enter a valid 0x… 64-char hex address'); return; }
     setErr(''); setLoading(true); setResult(null); setVouchers([]);
     try {
       const r = await getScore(q);
@@ -183,166 +211,172 @@ export default function App() {
   const simTier = simScore >= 66 ? 'Gold' : simScore >= 31 ? 'Silver' : 'Bronze';
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
-      {/* Animated grid background */}
-      <div className="fixed inset-0 pointer-events-none opacity-5">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-      </div>
+    <div className="min-h-screen relative">
+      <AnimatedGradientBg />
 
       {/* Header */}
-      <header className="border-b border-white/10 sticky top-0 backdrop-blur bg-[#0a0e14]/80 z-10">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/vault.svg" className="w-9 h-9" alt="VaraVault" />
+      <header className="relative z-20 border-b border-white/10 sticky top-0 backdrop-blur-xl bg-[#0a0e14]/60">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-vara to-cyan-400 rounded-xl blur opacity-75" />
+              <img src="/vault.svg" className="relative w-10 h-10 rounded-xl p-2 bg-[#0a0e14]" alt="VaraVault" />
+            </div>
             <div>
-              <div className="font-bold leading-tight">VaraVault</div>
-              <div className="text-[11px] text-gray-400 leading-tight">Meta-Oracle · Vara Mainnet</div>
+              <div className="font-black text-lg leading-tight">VaraVault</div>
+              <div className="text-[10px] text-gray-400 font-semibold">VARA Meta-Oracle</div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-2 text-xs text-gray-300">
-              <span className="relative inline-flex w-2.5 h-2.5">
-                <span className={`pulse-ring inline-flex w-2.5 h-2.5 rounded-full ${conn === 'live' ? 'bg-green-400' : conn === 'error' ? 'bg-red-400' : 'bg-yellow-400'}`} />
-              </span>
-              {conn === 'live' ? 'Mainnet live' : conn === 'error' ? 'Offline' : 'Connecting…'}
+          <div className="flex items-center gap-4">
+            <span className={`flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full ${
+              conn === 'live' ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'
+            }`}>
+              <span className={`w-2.5 h-2.5 rounded-full ${conn === 'live' ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`} />
+              {conn === 'live' ? 'MAINNET LIVE' : 'OFFLINE'}
             </span>
             <a href="https://github.com/JMadhan1/varavault" target="_blank" rel="noreferrer"
-              className="text-sm px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition">GitHub</a>
+              className="text-xs font-bold px-4 py-2 rounded-lg bg-gradient-to-r from-vara to-cyan-400 text-black hover:shadow-lg hover:shadow-vara/50 transition">GitHub</a>
           </div>
         </div>
       </header>
 
       {/* Hero */}
-      <section className="max-w-6xl mx-auto px-4 pt-16 pb-12 text-center">
-        <div className="inline-block text-xs px-3 py-1 rounded-full bg-vara/15 text-vara border border-vara/30 mb-4 animate-fade-in-up">
-          Agents Arena S1 · Agent Services Track
+      <section className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-16 text-center">
+        <div className="inline-block text-xs px-4 py-2 rounded-full bg-gradient-to-r from-vara/20 to-cyan-400/20 text-cyan-300 border border-cyan-400/30 mb-6 font-bold tracking-widest animate-pulse">
+          ⚡ AGENTS ARENA S1 · TRACK 01 AGENT SERVICES ⚡
         </div>
-        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          The <span className="text-transparent bg-clip-text bg-gradient-to-r from-vara via-blue-400 to-cyan-400">meta-oracle</span> for the<br/>Vara agent economy
+        <h1 className="text-7xl md:text-8xl font-black leading-tight mt-6 mb-4" style={{
+          background: 'linear-gradient(135deg, #00a8e0 0%, #00d9ff 50%, #00a8e0 100%)',
+          backgroundSize: '200% 200%',
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text',
+          color: 'transparent',
+          animation: 'gradient 3s ease infinite',
+        }}>
+          META-ORACLE
         </h1>
-        <p className="mt-6 text-lg text-gray-400 max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          Every agent on Vara checks reputation before transacting. VaraVault aggregates trust signals from across the entire network —
-          reads from markets, feeds attestations to discovery platforms, publishes analytics to the collective.
-          <br/>
-          <span className="text-sm text-gray-500 block mt-2">Infrastructure every other agent consumes.</span>
+        <p className="text-xl text-gray-300 max-w-3xl mx-auto mt-6 leading-relaxed font-semibold">
+          Trust layer for the Vara agent economy. Every agent checks reputation before transacting.
+          <br />
+          <span className="text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">VaraVault aggregates signals from across the network.</span>
         </p>
-        <code className="mt-6 inline-block text-[11px] text-gray-500 break-all animate-fade-in-up" style={{ animationDelay: '0.3s' }}>{PROGRAM_ID}</code>
+        <code className="mt-8 inline-block text-[12px] text-gray-400 bg-black/50 px-4 py-2 rounded-lg border border-white/10 font-mono">{PROGRAM_ID}</code>
       </section>
 
-      {/* Simulator */}
-      <section className="max-w-6xl mx-auto px-4 py-12 border-t border-white/10">
-        <h2 className="text-2xl font-bold mb-6">Interactive Reputation Simulator</h2>
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="rounded-2xl bg-white/5 border border-white/10 p-8 space-y-6">
-            <SimulatorSlider label="Calls seen" value={calls} onChange={setCalls} />
-            <SimulatorSlider label="Vouchers" value={vouchCount} onChange={setVouchCount} />
-            <div className="pt-4 border-t border-white/10">
-              <div className="text-sm text-gray-400 mb-2">Scoring: min(100, calls × 10 + vouchers × 15)</div>
-              <div className="text-2xl font-bold text-vara">Score: {simScore}</div>
+      {/* Simulator Section */}
+      <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10">
+        <h2 className="text-4xl font-black mb-10 text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">
+          Interactive Reputation Simulator
+        </h2>
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <GlassCard className="space-y-8">
+            <div>
+              <SimulatorSlider label="Calls Seen" value={calls} onChange={setCalls} max={30} />
             </div>
-          </div>
-          <div className="flex justify-center">
+            <div>
+              <SimulatorSlider label="Vouchers" value={vouchCount} onChange={setVouchCount} max={30} />
+            </div>
+            <div className="pt-6 border-t border-white/20">
+              <div className="text-sm text-gray-400 mb-3 font-mono">Score = min(100, calls × 10 + vouchers × 15)</div>
+              <div className="text-5xl font-black" style={{ color: TIER_COLORS[simTier] }}>
+                {simScore}/100
+              </div>
+              <div className={`text-lg font-bold mt-2 ${TIER_CLASS[simTier]}`}>{simTier} Tier</div>
+            </div>
+          </GlassCard>
+          <div className="flex justify-center items-center">
             <ScoreRing score={simScore} tier={simTier} />
           </div>
         </div>
       </section>
 
-      {/* Lookup */}
-      <section className="max-w-6xl mx-auto px-4 py-12 border-t border-white/10">
-        <h2 className="text-2xl font-bold mb-6">Look up any agent's reputation</h2>
-        <div className="rounded-2xl bg-white/5 border border-white/10 p-8 glow">
-          <div className="flex flex-col sm:flex-row gap-3 mb-4">
-            <input
-              value={target}
-              onChange={(e) => setTarget(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && lookup()}
-              placeholder="0x… agent / program id"
-              className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 font-mono text-sm focus:outline-none focus:border-vara" />
-            <button onClick={() => lookup()} disabled={!ready || loading}
-              className="px-6 py-3 rounded-xl bg-vara hover:bg-vara/80 text-black font-semibold transition disabled:opacity-50">
-              {loading ? 'Querying…' : 'Get Score'}
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2 mb-4">
-            {EXAMPLES.map((ex) => (
-              <button key={ex.id} onClick={() => { setTarget(ex.id); lookup(ex.id); }}
-                className="text-xs px-3 py-1 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 transition">
-                {ex.label}
+      {/* Lookup Section */}
+      <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10">
+        <h2 className="text-4xl font-black mb-10 text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">
+          Look Up Any Agent
+        </h2>
+        <GlassCard>
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                value={target}
+                onChange={(e) => setTarget(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && lookup()}
+                placeholder="0x… agent address"
+                className="flex-1 bg-black/40 border border-white/15 rounded-xl px-4 py-4 font-mono text-sm focus:outline-none focus:border-vara focus:ring-2 focus:ring-vara/30 transition-all"
+              />
+              <button onClick={() => lookup()} disabled={!ready || loading}
+                className="px-8 py-4 rounded-xl bg-gradient-to-r from-vara to-cyan-400 text-black font-bold hover:shadow-2xl hover:shadow-vara/50 transition-all disabled:opacity-50 whitespace-nowrap">
+                {loading ? '⏳ Querying...' : '🔍 Get Score'}
               </button>
-            ))}
-          </div>
-          {err && <div className="text-sm text-red-400 mb-4">{err}</div>}
-
-          {result && (
-            <div className="mt-8 grid md:grid-cols-[auto,1fr] gap-8 items-start">
-              <div className="flex justify-center"><ScoreRing score={result.score} tier={result.tier} /></div>
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className={`rounded-xl ${TIER_BG[result.tier]} border border-white/10 p-4`}>
-                    <div className="text-xs uppercase tracking-wide text-gray-400">Tier</div>
-                    <div className={`text-2xl font-bold mt-1 ${TIER_CLASS[result.tier]}`}>{result.tier}</div>
-                  </div>
-                  <Stat label="Score" value={`${result.score}/100`} />
-                  <Stat label="Vouchers" value={result.voucherCount} sub="agents staking trust" />
-                  <Stat label="Calls seen" value={result.callsSeen} sub="on-chain demand" />
-                </div>
-                {vouchers.length > 0 && (
-                  <div>
-                    <div className="text-xs uppercase tracking-wide text-gray-400 mb-2">Vouched by ({vouchers.length})</div>
-                    <div className="flex flex-wrap gap-2">
-                      {vouchers.slice(0, 5).map((v) => (
-                        <code key={v} className="text-[11px] bg-black/40 px-2 py-1 rounded border border-white/10">
-                          {String(v).slice(0, 10)}…
-                        </code>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
-          )}
-        </div>
+            <div className="flex flex-wrap gap-2">
+              {EXAMPLES.map((ex) => (
+                <button key={ex.id} onClick={() => { setTarget(ex.id); lookup(ex.id); }}
+                  className="text-xs px-4 py-2 rounded-full bg-white/5 hover:bg-vara/30 border border-white/10 hover:border-vara transition-all font-semibold">
+                  {ex.label}
+                </button>
+              ))}
+            </div>
+            {err && <div className="text-sm text-red-400 font-semibold bg-red-500/10 px-4 py-3 rounded-lg border border-red-500/20">{err}</div>}
+
+            {result && (
+              <div className="mt-8 pt-8 border-t border-white/10">
+                <div className="grid md:grid-cols-[auto,1fr] gap-8 items-start">
+                  <ScoreRing score={result.score} tier={result.tier} />
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-2 gap-4">
+                      <AnimatedStat label="Tier" value={result.tier} icon={result.tier === 'Gold' ? '👑' : result.tier === 'Silver' ? '⭐' : '🥉'} />
+                      <AnimatedStat label="Score" value={result.score} sub="/100" />
+                      <AnimatedStat label="Calls Seen" value={result.callsSeen} sub="queries" />
+                      <AnimatedStat label="Vouchers" value={result.voucherCount} sub="trust stakes" />
+                    </div>
+                    {vouchers.length > 0 && (
+                      <GlassCard>
+                        <div className="text-xs uppercase tracking-widest text-gray-400 font-bold mb-3">Vouched By ({vouchers.length})</div>
+                        <div className="flex flex-wrap gap-2">
+                          {vouchers.slice(0, 8).map((v) => (
+                            <code key={v} className="text-[10px] bg-black/50 px-2 py-1 rounded border border-white/10 font-mono">
+                              {String(v).slice(0, 8)}…
+                            </code>
+                          ))}
+                        </div>
+                      </GlassCard>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </GlassCard>
       </section>
 
       {/* Leaderboard */}
-      <section className="max-w-6xl mx-auto px-4 py-12 border-t border-white/10">
-        <h2 className="text-2xl font-bold mb-6">Live Leaderboard</h2>
+      <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10">
+        <h2 className="text-4xl font-black mb-10 text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">
+          Live Rankings
+        </h2>
         {leaderLoading ? (
-          <div className="text-center text-gray-400 py-8">Loading on-chain scores…</div>
+          <GlassCard className="text-center py-12">
+            <div className="inline-block animate-spin text-4xl mb-3">⚙️</div>
+            <div className="text-gray-400 font-semibold">Fetching on-chain leaderboard…</div>
+          </GlassCard>
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-white/10">
-            <table className="w-full text-sm">
-              <thead className="bg-white/5 border-b border-white/10">
+          <div className="overflow-hidden rounded-2xl border border-white/10 backdrop-blur-xl bg-white/5">
+            <table className="w-full">
+              <thead className="bg-gradient-to-r from-vara/20 to-cyan-400/20 border-b border-white/10">
                 <tr>
-                  <th className="px-4 py-3 text-left">Rank</th>
-                  <th className="px-4 py-3 text-left">Agent</th>
-                  <th className="px-4 py-3 text-right">Score</th>
-                  <th className="px-4 py-3 text-center">Tier</th>
-                  <th className="px-4 py-3 text-right">Calls</th>
-                  <th className="px-4 py-3 text-right">Vouchers</th>
+                  <th className="px-6 py-4 text-left text-xs uppercase tracking-widest font-black text-gray-300">Rank</th>
+                  <th className="px-6 py-4 text-left text-xs uppercase tracking-widest font-black text-gray-300">Agent</th>
+                  <th className="px-6 py-4 text-right text-xs uppercase tracking-widest font-black text-gray-300">Score</th>
+                  <th className="px-6 py-4 text-center text-xs uppercase tracking-widest font-black text-gray-300">Tier</th>
+                  <th className="px-6 py-4 text-right text-xs uppercase tracking-widest font-black text-gray-300">Calls</th>
+                  <th className="px-6 py-4 text-right text-xs uppercase tracking-widest font-black text-gray-300">Vouches</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody>
                 {leaderboard.map((agent, i) => (
-                  <tr key={agent.id} className="hover:bg-white/5 transition">
-                    <td className="px-4 py-3 font-bold text-vara">#{i + 1}</td>
-                    <td className="px-4 py-3 font-semibold">{agent.label}</td>
-                    <td className="px-4 py-3 text-right font-bold">{agent.score}</td>
-                    <td className="px-4 py-3 text-center">
-                      <span className={`px-2 py-1 rounded ${TIER_BG[agent.tier]}`}>
-                        <span className={TIER_CLASS[agent.tier]}>{agent.tier}</span>
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-right text-gray-400">{agent.callsSeen}</td>
-                    <td className="px-4 py-3 text-right text-gray-400">{agent.voucherCount}</td>
-                  </tr>
+                  <LeaderboardRow key={agent.id} rank={i + 1} agent={agent.label} score={agent.score} tier={agent.tier} calls={agent.callsSeen} vouchers={agent.voucherCount} />
                 ))}
               </tbody>
             </table>
@@ -350,47 +384,58 @@ export default function App() {
         )}
       </section>
 
-      {/* Network Map */}
-      <section className="max-w-6xl mx-auto px-4 py-12 border-t border-white/10">
-        <h2 className="text-2xl font-bold mb-6">Cross-Agent Network</h2>
-        <NetworkMap />
+      {/* Network Visualization */}
+      <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10">
+        <h2 className="text-4xl font-black mb-10 text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">
+          Ecosystem Integration
+        </h2>
+        <ParticleNetwork />
       </section>
 
-      {/* Activity Feed */}
-      <section className="max-w-6xl mx-auto px-4 py-12 border-t border-white/10">
-        <h2 className="text-2xl font-bold mb-6">Activity Feed</h2>
-        <ActivityFeed />
+      {/* Stats */}
+      <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10 grid sm:grid-cols-3 gap-6">
+        <AnimatedStat label="Query Fee" value={fee != null ? `${formatVara(fee)} VARA` : '—'} sub="per call" icon="💳" />
+        <AnimatedStat label="Fees Accrued" value={accrued != null ? `${formatVara(accrued)} VARA` : '—'} sub="on-chain" icon="💰" />
+        <AnimatedStat label="Network" value="Vara Mainnet" sub="live now" icon="🌐" />
       </section>
 
-      {/* Protocol stats */}
-      <section className="max-w-6xl mx-auto px-4 py-12 border-t border-white/10 grid sm:grid-cols-3 gap-3">
-        <Stat label="Query fee" value={fee != null ? `${formatVara(fee)} VARA` : '—'} sub="per paid QueryScore" />
-        <Stat label="Fees accrued" value={accrued != null ? `${formatVara(accrued)} VARA` : '—'} sub="captured on-chain" />
-        <Stat label="Network" value="Vara Mainnet" sub="rpc.vara.network" />
-      </section>
-
-      {/* How to integrate */}
-      <section className="max-w-6xl mx-auto px-4 py-12 border-t border-white/10">
-        <h2 className="text-2xl font-bold mb-6">How agents integrate</h2>
-        <div className="grid md:grid-cols-3 gap-4">
-          {[
-            ['Query a score', 'Reputation/QueryScore(target)', 'Paid (1 VARA). Records demand + returns fresh score. Overpayment refunded.'],
-            ['Vouch for an agent', 'Voucher/Vouch(target)', 'Stake 1 VARA to put your trust behind an agent. Feeds directly into their score.'],
-            ['Free read', 'Reputation/GetScore(target)', 'Zero-cost lookup of any agent\'s current tier and stats.'],
-          ].map(([t, code, d]) => (
-            <div key={t} className="rounded-xl bg-white/5 border border-white/10 p-4">
-              <div className="font-semibold">{t}</div>
-              <code className="text-xs text-vara block my-2 break-all">{code}</code>
-              <div className="text-sm text-gray-400">{d}</div>
-            </div>
-          ))}
+      {/* CTA */}
+      <section className="relative z-10 max-w-7xl mx-auto px-6 py-20 text-center border-t border-white/10">
+        <h2 className="text-5xl font-black mb-4">Ready to Build Trust?</h2>
+        <p className="text-gray-400 mb-8 text-lg">Integrate VaraVault into your agent. Query reputation. Vouch for trust. Earn VARA.</p>
+        <div className="flex gap-4 justify-center">
+          <a href="https://github.com/JMadhan1/varavault" target="_blank" rel="noreferrer"
+            className="px-8 py-4 rounded-xl bg-gradient-to-r from-vara to-cyan-400 text-black font-bold hover:shadow-2xl hover:shadow-vara/50 transition-all">
+            View Code on GitHub
+          </a>
+          <a href={`https://agents.vara.network/dashboard`} target="_blank" rel="noreferrer"
+            className="px-8 py-4 rounded-xl bg-white/10 border border-white/20 font-bold hover:border-vara hover:bg-vara/10 transition-all">
+            See Live on Agents Arena
+          </a>
         </div>
       </section>
 
-      <footer className="max-w-6xl mx-auto px-4 py-12 mt-12 text-center text-gray-500 text-sm border-t border-white/10">
-        VaraVault — Meta-oracle. Trust layer. Built for Vara Agents Arena S1.
-        <div className="mt-1">Operator <span className="text-gray-300">jmadhan</span></div>
+      <footer className="relative z-10 max-w-7xl mx-auto px-6 py-12 text-center border-t border-white/10 text-gray-500 text-sm">
+        <div className="font-bold text-white mb-2">VaraVault 🏛️</div>
+        <div>Because the agent economy runs on trust, and trust should be on-chain.</div>
+        <div className="mt-2 text-xs">Built for Vara Agents Arena S1 · Operator <span className="text-vara font-bold">jmadhan</span></div>
       </footer>
+
+      <style>{`
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+      `}</style>
     </div>
   );
 }
