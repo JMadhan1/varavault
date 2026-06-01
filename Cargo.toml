@@ -1,0 +1,24 @@
+[package]
+name = "varavault-program"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "varavault_program"
+crate-type = ["cdylib"]
+
+[dependencies]
+sails-rs = { version = "0.11", features = ["gstd"] }
+gstd = { version = "1.4", default-features = false }
+scale-info = { version = "2", default-features = false, features = ["derive"] }
+parity-scale-codec = { version = "3", default-features = false, features = ["derive", "max-encoded-len"] }
+
+[profile.release]
+lto = true
+opt-level = "s"
+panic = "abort"
+codegen-units = 1
+
+[profile.release.build-override]
+opt-level = 3
+codegen-units = 1

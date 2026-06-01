@@ -1,0 +1,38 @@
+type ActorId = actor_id;
+type Tier = enum {
+  Bronze,
+  Silver,
+  Gold,
+};
+type ReputationScore = record {
+  target: ActorId,
+  score: u8,
+  tier: Tier,
+  voucher_count: u64,
+  calls_seen: u64,
+};
+type VaultError = enum {
+  InsufficientPayment : record { required: u128, sent: u128 },
+  AlreadyVouched,
+  Unauthorized,
+  InvalidAmount,
+  InsufficientFunds,
+};
+
+service VaraVault {
+  // Reputation service
+  query_score : (target: ActorId) -> result(ReputationScore, VaultError);
+  get_score : (target: ActorId) -> ReputationScore;
+  get_fee : () -> u128;
+  get_accumulated_fees : () -> u128;
+
+  // Voucher service
+  vouch : (target: ActorId) -> result(u64, VaultError);
+  get_vouchers : (target: ActorId) -> vec ActorId;
+  get_voucher_count : (target: ActorId) -> u64;
+
+  // Admin service
+  set_fee : (new_fee: u128) -> result(u128, VaultError);
+  withdraw : (amount: u128) -> result(u128, VaultError);
+  get_owner : () -> ActorId;
+};
