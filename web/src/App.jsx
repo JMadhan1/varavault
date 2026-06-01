@@ -1,19 +1,11 @@
 import { useEffect, useState } from 'react';
 import {
   initVault, getScore, getFee, getAccumulatedFees, getVouchers,
-  formatVara, PROGRAM_ID, getLeaderboard,
+  formatVara, PROGRAM_ID,
 } from './vault.js';
-
-const EXAMPLES = [
-  { label: 'VaraVault (self)', id: PROGRAM_ID },
-  { label: 'varabridge', id: '0xfb7ed5a79dc2ff15283a524a4489321b5e1f6341db2b9892be83b9568cc1fcb4' },
-  { label: 'a2a-radar', id: '0xee23c4ceb17d501c6bf3906da9a9c147f4fa96bf25acb6f06da9e451c4462af3' },
-  { label: 'aan-tv-data', id: '0xec8f2b2ecb27ea82bfe7565bf981db1749a61fc27558e80ae575eadf34530e5c' },
-];
 
 const TIER_COLORS = { Bronze: '#d4a574', Silver: '#a8b5c4', Gold: '#ffd700' };
 const TIER_CLASS = { Bronze: 'text-[#d4a574]', Silver: 'text-[#a8b5c4]', Gold: 'text-yellow-300' };
-const TIER_BG = { Bronze: 'bg-[#d4a574]/15', Silver: 'bg-[#a8b5c4]/15', Gold: 'bg-yellow-400/15' };
 
 function AnimatedGradientBg() {
   return (
@@ -93,72 +85,6 @@ function SimulatorSlider({ label, value, onChange, max = 20 }) {
   );
 }
 
-function ParticleNetwork() {
-  return (
-    <div className="relative h-72 rounded-2xl bg-gradient-to-b from-white/5 to-transparent border border-white/10 p-8 overflow-hidden">
-      <svg className="absolute inset-0 w-full h-full opacity-40" preserveAspectRatio="none">
-        <defs>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-        <circle cx="50%" cy="50%" r="80" fill="none" stroke="url(#grad1)" strokeWidth="2" opacity="0.3" />
-        <circle cx="50%" cy="50%" r="120" fill="none" stroke="url(#grad2)" strokeWidth="1" opacity="0.2" />
-        <defs>
-          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#00a8e0" />
-            <stop offset="100%" stopColor="#00d9ff" />
-          </linearGradient>
-          <linearGradient id="grad2" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#00d9ff" />
-            <stop offset="100%" stopColor="#00a8e0" />
-          </linearGradient>
-        </defs>
-        {/* Network nodes */}
-        <g filter="url(#glow)">
-          <circle cx="20%" cy="50%" r="8" fill="#00a8e0" opacity="0.6" className="animate-pulse" />
-          <circle cx="50%" cy="30%" r="10" fill="#00d9ff" opacity="0.7" />
-          <circle cx="80%" cy="50%" r="8" fill="#00a8e0" opacity="0.6" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
-          <circle cx="50%" cy="70%" r="9" fill="#00d9ff" opacity="0.65" />
-        </g>
-        {/* Connection lines */}
-        <line x1="50%" y1="50%" x2="20%" y2="50%" stroke="#00a8e0" strokeWidth="2" opacity="0.3" />
-        <line x1="50%" y1="50%" x2="50%" y2="30%" stroke="#00d9ff" strokeWidth="2" opacity="0.3" />
-        <line x1="50%" y1="50%" x2="80%" y2="50%" stroke="#00a8e0" strokeWidth="2" opacity="0.3" />
-        <line x1="50%" y1="50%" x2="50%" y2="70%" stroke="#00d9ff" strokeWidth="2" opacity="0.3" />
-      </svg>
-      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center">
-        <div className="text-5xl font-black mb-2">🌐</div>
-        <h3 className="text-xl font-bold mb-1">Meta-Oracle Network</h3>
-        <p className="text-sm text-gray-400">VaraVault aggregates trust signals from across the ecosystem</p>
-      </div>
-    </div>
-  );
-}
-
-function LeaderboardRow({ rank, agent, score, tier, calls, vouchers }) {
-  return (
-    <tr className="hover:bg-white/5 transition-all duration-300 border-b border-white/5 last:border-0 hover:shadow-lg hover:shadow-vara/20">
-      <td className="px-6 py-4 font-black text-lg" style={{ color: TIER_COLORS[tier] }}>#{rank}</td>
-      <td className="px-6 py-4 font-bold text-white">{agent}</td>
-      <td className="px-6 py-4 text-right">
-        <span className="font-black text-xl" style={{ color: TIER_COLORS[tier] }}>{score}</span>
-      </td>
-      <td className="px-6 py-4 text-center">
-        <span className={`px-3 py-1 rounded-full font-bold text-sm ${TIER_BG[tier]} ${TIER_CLASS[tier]}`}>
-          {tier}
-        </span>
-      </td>
-      <td className="px-6 py-4 text-right text-gray-400 font-semibold">{calls}</td>
-      <td className="px-6 py-4 text-right text-gray-400 font-semibold">{vouchers}</td>
-    </tr>
-  );
-}
-
 export default function App() {
   const [ready, setReady] = useState(false);
   const [conn, setConn] = useState('connecting');
@@ -171,8 +97,6 @@ export default function App() {
   const [accrued, setAccrued] = useState(null);
   const [calls, setCalls] = useState(8);
   const [vouchCount, setVouchCount] = useState(5);
-  const [leaderboard, setLeaderboard] = useState([]);
-  const [leaderLoading, setLeaderLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -183,13 +107,9 @@ export default function App() {
         setFee(await getFee());
         setAccrued(await getAccumulatedFees());
         await lookup(PROGRAM_ID);
-        const leader = await getLeaderboard(EXAMPLES.map(e => e.id));
-        setLeaderboard(leader);
-        setLeaderLoading(false);
       } catch (e) {
         setConn('error');
         setErr('Connection failed: ' + e.message);
-        setLeaderLoading(false);
       }
     })();
   }, []);
@@ -224,7 +144,7 @@ export default function App() {
             </div>
             <div>
               <div className="font-black text-lg leading-tight">VaraVault</div>
-              <div className="text-[10px] text-gray-400 font-semibold">VARA Meta-Oracle</div>
+              <div className="text-[10px] text-gray-400 font-semibold">Trust Layer for Vara</div>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -253,21 +173,47 @@ export default function App() {
           color: 'transparent',
           animation: 'gradient 3s ease infinite',
         }}>
-          META-ORACLE
+          VARAVAULT
         </h1>
-        <p className="text-xl text-gray-300 max-w-3xl mx-auto mt-6 leading-relaxed font-semibold">
-          Trust layer for the Vara agent economy. Every agent checks reputation before transacting.
-          <br />
-          <span className="text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">VaraVault aggregates signals from across the network.</span>
+        <p className="text-2xl text-gray-300 max-w-3xl mx-auto mt-6 leading-relaxed font-bold">
+          The on-chain reputation oracle for agents on Vara Mainnet.
+        </p>
+        <p className="text-lg text-gray-400 max-w-3xl mx-auto mt-3">
+          Before any agent transacts with another, they check VaraVault. One query. Deterministic score. Zero trust assumptions.
         </p>
         <code className="mt-8 inline-block text-[12px] text-gray-400 bg-black/50 px-4 py-2 rounded-lg border border-white/10 font-mono">{PROGRAM_ID}</code>
+      </section>
+
+      {/* What VaraVault Does */}
+      <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10">
+        <h2 className="text-4xl font-black mb-10 text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">
+          What VaraVault Does
+        </h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          <GlassCard>
+            <div className="text-4xl mb-3">📊</div>
+            <h3 className="text-xl font-bold mb-2">Query Reputation</h3>
+            <p className="text-gray-400 text-sm">Call QueryScore with any agent address. Get a 0-100 score + tier (Bronze/Silver/Gold) in real-time. Costs 1 VARA.</p>
+          </GlassCard>
+          <GlassCard>
+            <div className="text-4xl mb-3">🤝</div>
+            <h3 className="text-xl font-bold mb-2">Vouch for Trust</h3>
+            <p className="text-gray-400 text-sm">Stake 1 VARA to vouch for an agent you trust. Your vouches directly feed into their reputation score.</p>
+          </GlassCard>
+          <GlassCard>
+            <div className="text-4xl mb-3">💰</div>
+            <h3 className="text-xl font-bold mb-2">Earn Revenue</h3>
+            <p className="text-gray-400 text-sm">Every paid query and vouch generates fees. The contract captures revenue. Sustainable oracle design.</p>
+          </GlassCard>
+        </div>
       </section>
 
       {/* Simulator Section */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10">
         <h2 className="text-4xl font-black mb-10 text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">
-          Interactive Reputation Simulator
+          Try the Simulator (No Wallet Needed)
         </h2>
+        <p className="text-gray-400 mb-8 max-w-2xl">Drag the sliders to see how reputation scores are calculated. Every agent's score is based on calls seen + vouchers staked.</p>
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <GlassCard className="space-y-8">
             <div>
@@ -282,6 +228,11 @@ export default function App() {
                 {simScore}/100
               </div>
               <div className={`text-lg font-bold mt-2 ${TIER_CLASS[simTier]}`}>{simTier} Tier</div>
+              <div className="text-xs text-gray-500 mt-3">
+                {simTier === 'Gold' && '⭐ Highest trust tier'}
+                {simTier === 'Silver' && '✨ Mid-tier trust'}
+                {simTier === 'Bronze' && '🥉 Entry-level reputation'}
+              </div>
             </div>
           </GlassCard>
           <div className="flex justify-center items-center">
@@ -293,8 +244,9 @@ export default function App() {
       {/* Lookup Section */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10">
         <h2 className="text-4xl font-black mb-10 text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">
-          Look Up Any Agent
+          Look Up VaraVault's Live Score
         </h2>
+        <p className="text-gray-400 mb-8">VaraVault's reputation on mainnet. Built by real agent queries and vouches.</p>
         <GlassCard>
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-3">
@@ -310,14 +262,10 @@ export default function App() {
                 {loading ? '⏳ Querying...' : '🔍 Get Score'}
               </button>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {EXAMPLES.map((ex) => (
-                <button key={ex.id} onClick={() => { setTarget(ex.id); lookup(ex.id); }}
-                  className="text-xs px-4 py-2 rounded-full bg-white/5 hover:bg-vara/30 border border-white/10 hover:border-vara transition-all font-semibold">
-                  {ex.label}
-                </button>
-              ))}
-            </div>
+            <button onClick={() => lookup(PROGRAM_ID)}
+              className="text-sm px-4 py-2 rounded-lg bg-white/5 hover:bg-vara/20 border border-white/10 hover:border-vara transition-all font-semibold">
+              📍 Check VaraVault's Own Score
+            </button>
             {err && <div className="text-sm text-red-400 font-semibold bg-red-500/10 px-4 py-3 rounded-lg border border-red-500/20">{err}</div>}
 
             {result && (
@@ -351,73 +299,60 @@ export default function App() {
         </GlassCard>
       </section>
 
-      {/* Leaderboard */}
+      {/* How It Works */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10">
         <h2 className="text-4xl font-black mb-10 text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">
-          Live Rankings
+          How the Scoring Works
         </h2>
-        {leaderLoading ? (
-          <GlassCard className="text-center py-12">
-            <div className="inline-block animate-spin text-4xl mb-3">⚙️</div>
-            <div className="text-gray-400 font-semibold">Fetching on-chain leaderboard…</div>
-          </GlassCard>
-        ) : (
-          <div className="overflow-hidden rounded-2xl border border-white/10 backdrop-blur-xl bg-white/5">
-            <table className="w-full">
-              <thead className="bg-gradient-to-r from-vara/20 to-cyan-400/20 border-b border-white/10">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs uppercase tracking-widest font-black text-gray-300">Rank</th>
-                  <th className="px-6 py-4 text-left text-xs uppercase tracking-widest font-black text-gray-300">Agent</th>
-                  <th className="px-6 py-4 text-right text-xs uppercase tracking-widest font-black text-gray-300">Score</th>
-                  <th className="px-6 py-4 text-center text-xs uppercase tracking-widest font-black text-gray-300">Tier</th>
-                  <th className="px-6 py-4 text-right text-xs uppercase tracking-widest font-black text-gray-300">Calls</th>
-                  <th className="px-6 py-4 text-right text-xs uppercase tracking-widest font-black text-gray-300">Vouches</th>
-                </tr>
-              </thead>
-              <tbody>
-                {leaderboard.map((agent, i) => (
-                  <LeaderboardRow key={agent.id} rank={i + 1} agent={agent.label} score={agent.score} tier={agent.tier} calls={agent.callsSeen} vouchers={agent.voucherCount} />
-                ))}
-              </tbody>
-            </table>
+        <GlassCard>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-xl font-bold mb-2">Deterministic Reputation</h3>
+              <p className="text-gray-400 mb-4">Every agent's score is calculated the same way, on-chain, verifiable by anyone:</p>
+              <code className="block bg-black/50 px-4 py-3 rounded-lg text-sm text-cyan-300 font-mono border border-white/10 overflow-x-auto">
+                score = min(100, calls_seen × 10 + voucher_count × 15)
+              </code>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-bold mb-2">📊 Calls Seen</h4>
+                <p className="text-gray-400 text-sm">How many times other agents have queried this agent's reputation. A proxy for relevance and demand.</p>
+              </div>
+              <div>
+                <h4 className="font-bold mb-2">🤝 Vouchers</h4>
+                <p className="text-gray-400 text-sm">How many wallets have staked VARA to vouch for this agent. A proxy for trust.</p>
+              </div>
+            </div>
           </div>
-        )}
-      </section>
-
-      {/* Network Visualization */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10">
-        <h2 className="text-4xl font-black mb-10 text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">
-          Ecosystem Integration
-        </h2>
-        <ParticleNetwork />
+        </GlassCard>
       </section>
 
       {/* Stats */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10 grid sm:grid-cols-3 gap-6">
-        <AnimatedStat label="Query Fee" value={fee != null ? `${formatVara(fee)} VARA` : '—'} sub="per call" icon="💳" />
-        <AnimatedStat label="Fees Accrued" value={accrued != null ? `${formatVara(accrued)} VARA` : '—'} sub="on-chain" icon="💰" />
+        <AnimatedStat label="Query Fee" value={fee != null ? `${(Number(fee) / 1e12).toFixed(2)} VARA` : '—'} sub="per call" icon="💳" />
+        <AnimatedStat label="Fees Accrued" value={accrued != null ? `${(Number(accrued) / 1e12).toFixed(2)} VARA` : '—'} sub="on-chain" icon="💰" />
         <AnimatedStat label="Network" value="Vara Mainnet" sub="live now" icon="🌐" />
       </section>
 
       {/* CTA */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-20 text-center border-t border-white/10">
         <h2 className="text-5xl font-black mb-4">Ready to Build Trust?</h2>
-        <p className="text-gray-400 mb-8 text-lg">Integrate VaraVault into your agent. Query reputation. Vouch for trust. Earn VARA.</p>
-        <div className="flex gap-4 justify-center">
+        <p className="text-gray-400 mb-8 text-lg">Integrate VaraVault into your agent. Query reputation. Vouch for trust. Build on Vara.</p>
+        <div className="flex gap-4 justify-center flex-wrap">
           <a href="https://github.com/JMadhan1/varavault" target="_blank" rel="noreferrer"
             className="px-8 py-4 rounded-xl bg-gradient-to-r from-vara to-cyan-400 text-black font-bold hover:shadow-2xl hover:shadow-vara/50 transition-all">
             View Code on GitHub
           </a>
-          <a href={`https://agents.vara.network/dashboard`} target="_blank" rel="noreferrer"
+          <a href="https://agents.vara.network" target="_blank" rel="noreferrer"
             className="px-8 py-4 rounded-xl bg-white/10 border border-white/20 font-bold hover:border-vara hover:bg-vara/10 transition-all">
-            See Live on Agents Arena
+            See on Agents Arena
           </a>
         </div>
       </section>
 
       <footer className="relative z-10 max-w-7xl mx-auto px-6 py-12 text-center border-t border-white/10 text-gray-500 text-sm">
         <div className="font-bold text-white mb-2">VaraVault 🏛️</div>
-        <div>Because the agent economy runs on trust, and trust should be on-chain.</div>
+        <div>Reputation oracle for the Vara agent economy.</div>
         <div className="mt-2 text-xs">Built for Vara Agents Arena S1 · Operator <span className="text-vara font-bold">jmadhan</span></div>
       </footer>
 
