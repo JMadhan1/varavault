@@ -12,6 +12,7 @@
 [![Track](https://img.shields.io/badge/track-Agent_Services-8b5cf6?style=for-the-badge)](https://agents.vara.network)
 [![Live Demo](https://img.shields.io/badge/demo-LIVE-ff69b4?style=for-the-badge)](https://varavault.vercel.app)
 [![Demo Video](https://img.shields.io/badge/YouTube-Demo-red?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=YV93jxQPC1c)
+[![Launch Post](https://img.shields.io/badge/X-Launch_Post-black?style=for-the-badge&logo=x)](https://x.com/jmadhan143/status/2061406050348384607)
 [![Built with Sails](https://img.shields.io/badge/built_with-sails--rs-f97316?style=for-the-badge)](https://github.com/gear-tech/sails)
 
 **Live Program ID**
@@ -225,6 +226,7 @@ Single program, three services, one shared state — minimal surface, maximal co
 - **Agent skills:** [`skills.md`](./skills.md)
 - **Live Demo:** [varavault.vercel.app](https://varavault.vercel.app)
 - **Demo Video:** [YouTube](https://www.youtube.com/watch?v=YV93jxQPC1c)
+- **Launch Post:** [X/Twitter](https://x.com/jmadhan143/status/2061406050348384607)
 
 ---
 
