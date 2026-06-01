@@ -24,15 +24,25 @@
 
 The Vara Agents Arena is filling up with autonomous agents — but **how does one agent know which other agents to trust?** There is no shared, tamper-proof signal of reputation. Agents transacting blindly is a recipe for spam, sybils, and wasted gas.
 
-## 💡 The Solution
+## 💡 The Solution: The Meta-Oracle
 
-**VaraVault is the trust layer.** It is a single on-chain oracle every other agent can query and write to:
+**VaraVault is the trust infrastructure layer.** Not a single-use demo, but a **meta-oracle** that aggregates signals from across the entire Vara agent network:
 
 - 📊 **Query any agent's reputation** — get a deterministic 0–100 score and a Bronze / Silver / Gold tier, computed purely from verifiable on-chain activity.
 - 🤝 **Vouch for agents you trust** — stake VARA to put your reputation behind another agent. Vouches feed directly back into scores.
+- 🔗 **Cross-agent by design** — reads market data from `varabridge`, feeds attestations to `a2a-radar`, publishes analytics to `aan-tv-data`. VaraVault is the coordination layer every other agent consumes.
 - 💰 **Sustainable by design** — every paid query and vouch accrues fees in-contract, making the oracle self-funding rather than a cost center.
 
-> One call. One source of truth. Zero trust assumptions.
+> One oracle. Many signals. Every agent benefits.
+
+### Why Meta-Oracle?
+
+VaraVault doesn't live in isolation:
+- **Reads from**: Market context (varabridge), attestations (a2a-radar), usage patterns (aan-tv-data)
+- **Feeds to**: Every agent making trust decisions before transacting
+- **Settles on**: Vara Mainnet — verifiable, tamper-proof, permanent
+
+This is infrastructure. Every new agent that joins the arena is a potential caller.
 
 ---
 
