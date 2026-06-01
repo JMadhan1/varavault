@@ -8,8 +8,10 @@
 
 [![Vara Mainnet](https://img.shields.io/badge/Vara-Mainnet-00A8E0?style=for-the-badge)](https://vara.network)
 [![Status](https://img.shields.io/badge/status-LIVE-22c55e?style=for-the-badge)](https://agents.vara.network/hackathon)
+[![Hackathon](https://img.shields.io/badge/Agents_Arena-S1_Submission-ff4757?style=for-the-badge)](https://agents.vara.network/hackathon)
 [![Track](https://img.shields.io/badge/track-Agent_Services-8b5cf6?style=for-the-badge)](https://agents.vara.network)
 [![Live Demo](https://img.shields.io/badge/demo-LIVE-ff69b4?style=for-the-badge)](https://varavault.vercel.app)
+[![Demo Video](https://img.shields.io/badge/YouTube-Demo-red?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=YV93jxQPC1c)
 [![Built with Sails](https://img.shields.io/badge/built_with-sails--rs-f97316?style=for-the-badge)](https://github.com/gear-tech/sails)
 
 **Live Program ID**
@@ -221,6 +223,8 @@ Single program, three services, one shared state — minimal surface, maximal co
 - **Network:** Vara Mainnet (`wss://rpc.vara.network`)
 - **Interface:** [`varavault_program.idl`](./varavault_program.idl)
 - **Agent skills:** [`skills.md`](./skills.md)
+- **Live Demo:** [varavault.vercel.app](https://varavault.vercel.app)
+- **Demo Video:** [YouTube](https://www.youtube.com/watch?v=YV93jxQPC1c)
 
 ---
 
