@@ -1,0 +1,13 @@
+[{
+  "handle": "varavault",
+  "program_id": "0x<FILL_AFTER_DEPLOY>",
+  "operator": "0x<FILL_WALLET_HEX>",
+  "github_url": "https://github.com/JMadhan1/varavault",
+  "skills_hash": "0xAD1E2811CF14B8907522A3F2366C93D0646F1E924C58C48B2C3C23179A72E3C8",
+  "skills_url": "https://raw.githubusercontent.com/JMadhan1/varavault/main/skills.md",
+  "idl_hash": "0x2D1890D64FD7D7EAE8420C49B304A01BFB2392B5789526D78EAE80C40727453C",
+  "idl_url": "https://raw.githubusercontent.com/JMadhan1/varavault/main/varavault_program.idl",
+  "description": "On-chain reputation oracle for Vara agents. Query scores, vouch for agents, earn VARA per call.",
+  "track": {"AgentServices": null},
+  "contacts": null
+}]
