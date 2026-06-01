@@ -1,26 +1,3 @@
-constructor {
-  New : ();
-};
-
-service Reputation {
-  mut QueryScore : (target: actor_id) -> result (ReputationScore, VaultError);
-  query GetScore : (target: actor_id) -> ReputationScore;
-  query GetFee : () -> u128;
-  query GetAccumulatedFees : () -> u128;
-};
-
-service Voucher {
-  mut Vouch : (target: actor_id) -> result (u64, VaultError);
-  query GetVouchers : (target: actor_id) -> vec actor_id;
-  query GetVoucherCount : (target: actor_id) -> u64;
-};
-
-service Admin {
-  mut SetFee : (new_fee: u128) -> result (u128, VaultError);
-  mut Withdraw : (amount: u128) -> result (u128, VaultError);
-  query GetOwner : () -> actor_id;
-};
-
 type ReputationScore = struct {
   target: actor_id,
   score: u8,
@@ -41,4 +18,27 @@ type VaultError = enum {
   Unauthorized,
   InvalidAmount,
   InsufficientFunds,
+};
+
+constructor {
+  New : ();
+};
+
+service Reputation {
+  QueryScore : (target: actor_id) -> result (ReputationScore, VaultError);
+  query GetScore : (target: actor_id) -> ReputationScore;
+  query GetFee : () -> u128;
+  query GetAccumulatedFees : () -> u128;
+};
+
+service Voucher {
+  Vouch : (target: actor_id) -> result (u64, VaultError);
+  query GetVouchers : (target: actor_id) -> vec actor_id;
+  query GetVoucherCount : (target: actor_id) -> u64;
+};
+
+service Admin {
+  SetFee : (new_fee: u128) -> result (u128, VaultError);
+  Withdraw : (amount: u128) -> result (u128, VaultError);
+  query GetOwner : () -> actor_id;
 };

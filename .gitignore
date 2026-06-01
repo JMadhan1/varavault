@@ -1,2 +1,6 @@
 /target
 varavault.idl
+node_modules/
+deploy-output.txt
+.binpath
+*.log

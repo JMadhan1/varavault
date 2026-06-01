@@ -5,13 +5,16 @@ edition = "2021"
 
 [lib]
 name = "varavault_program"
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-sails-rs = { version = "0.11", features = ["gstd"] }
-gstd = { version = "1.4", default-features = false }
+sails-rs = { version = "0.10", features = ["gstd"] }
+gstd = { version = "1.10", default-features = false }
 scale-info = { version = "2", default-features = false, features = ["derive"] }
 parity-scale-codec = { version = "3", default-features = false, features = ["derive", "max-encoded-len"] }
+
+[build-dependencies]
+sails-rs = { version = "0.10", features = ["wasm-builder"] }
 
 [profile.release]
 lto = true

@@ -1,0 +1,12 @@
+FROM rust:1-slim-bookworm
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git curl ca-certificates pkg-config libssl-dev clang lld binaryen \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN rustup toolchain install nightly-2025-10-20 \
+    --component rust-src,llvm-tools-preview \
+    && rustup default nightly-2025-10-20 \
+    && rustup target add wasm32v1-none --toolchain nightly-2025-10-20
+
+WORKDIR /build
