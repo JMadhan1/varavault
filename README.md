@@ -9,6 +9,7 @@
 [![Vara Mainnet](https://img.shields.io/badge/Vara-Mainnet-00A8E0?style=for-the-badge)](https://vara.network)
 [![Status](https://img.shields.io/badge/status-LIVE-22c55e?style=for-the-badge)](https://agents.vara.network/hackathon)
 [![Track](https://img.shields.io/badge/track-Agent_Services-8b5cf6?style=for-the-badge)](https://agents.vara.network)
+[![Live Demo](https://img.shields.io/badge/demo-LIVE-ff69b4?style=for-the-badge)](https://varavault.vercel.app)
 [![Built with Sails](https://img.shields.io/badge/built_with-sails--rs-f97316?style=for-the-badge)](https://github.com/gear-tech/sails)
 
 **Live Program ID**
@@ -24,25 +25,25 @@
 
 The Vara Agents Arena is filling up with autonomous agents — but **how does one agent know which other agents to trust?** There is no shared, tamper-proof signal of reputation. Agents transacting blindly is a recipe for spam, sybils, and wasted gas.
 
-## 💡 The Solution: The Meta-Oracle
+## 💡 The Solution: On-Chain Reputation Infrastructure
 
-**VaraVault is the trust infrastructure layer.** Not a single-use demo, but a **meta-oracle** that aggregates signals from across the entire Vara agent network:
+**VaraVault is the trust layer every agent needs.** Not a toy demo — a production-grade oracle that solves the #1 problem in any agent economy: knowing who to trust before transacting.
 
-- 📊 **Query any agent's reputation** — get a deterministic 0–100 score and a Bronze / Silver / Gold tier, computed purely from verifiable on-chain activity.
-- 🤝 **Vouch for agents you trust** — stake VARA to put your reputation behind another agent. Vouches feed directly back into scores.
-- 🔗 **Cross-agent by design** — reads market data from `varabridge`, feeds attestations to `a2a-radar`, publishes analytics to `aan-tv-data`. VaraVault is the coordination layer every other agent consumes.
-- 💰 **Sustainable by design** — every paid query and vouch accrues fees in-contract, making the oracle self-funding rather than a cost center.
+- 📊 **Query any agent's reputation** — get a deterministic 0–100 score and a Bronze / Silver / Gold tier, computed purely from verifiable on-chain activity. No black-box ML. No off-chain inputs.
+- 🤝 **Vouch for agents you trust** — stake 1 VARA to put your reputation behind another agent. Vouches feed directly back into scores. Skin in the game.
+- � **Self-funding by design** — every paid query and vouch captures fees in-contract. The oracle earns its own gas. No grants. No subsidies.
+- 🌐 **Live on mainnet** — deployed, initialized, and serving real queries. Not a localnet prototype.
 
-> One oracle. Many signals. Every agent benefits.
+> One query. One source of truth. Zero trust assumptions.
 
-### Why Meta-Oracle?
+### Why VaraVault Wins
 
-VaraVault doesn't live in isolation:
-- **Reads from**: Market context (varabridge), attestations (a2a-radar), usage patterns (aan-tv-data)
-- **Feeds to**: Every agent making trust decisions before transacting
-- **Settles on**: Vara Mainnet — verifiable, tamper-proof, permanent
+VaraVault doesn't compete with other agents — it **enables** them:
+- **Every new agent** that joins the arena needs to know who to trust → potential caller
+- **Every transaction** between agents needs a trust check → potential fee
+- **Every staking decision** needs reputation data → potential vouch
 
-This is infrastructure. Every new agent that joins the arena is a potential caller.
+This is horizontal infrastructure. The more the arena grows, the more valuable VaraVault becomes.
 
 ---
 

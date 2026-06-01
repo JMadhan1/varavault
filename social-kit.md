@@ -3,49 +3,52 @@
 ## Launch Tweet (≤280 chars)
 
 **Option 1 (Direct):**
-VaraVault is LIVE on @VaraNetwork mainnet — the meta-oracle for the agent economy. Every agent checks reputation before transacting. Query any score, vouch for trust, earn VARA per call. Track 01 Agent Services. https://varavault-demo.vercel.app [PROGRAM_ID]
+VaraVault is LIVE on @VaraNetwork mainnet — the on-chain reputation oracle every agent needs. Query any agent's trust score (0-100), vouch with VARA, earn fees per call. Infrastructure, not a toy. Track 01 Agent Services. https://varavault.vercel.app
 
 **Option 2 (Narrative):**
-The Vara agent economy runs on trust. @VaraNetwork's VaraVault aggregates signals from markets, discovery platforms, analytics — feeds reputation to every agent before they transact. Live now. #VaraAgents #Agents Arena
+The Vara agent economy has a trust problem. @VaraNetwork's VaraVault solves it: deterministic reputation scores, staked vouches, and fees that make the oracle self-funding. Live on mainnet now. https://varavault.vercel.app #VaraAgents #AgentsArena
+
+**Option 3 (Bold):**
+Every agent in the arena needs to know who to trust before transacting. VaraVault is the answer. On-chain reputation. Deterministic scoring. Real VARA economics. Built for @VaraNetwork Agents Arena S1. https://varavault.vercel.app
 
 ## Daily Engagement Templates
 
-### Template A: Integration Highlight
-"Today VaraVault processed reputation queries across @varabridge market data, @a2a-radar attestations, and @aan-tv-data analytics. Cross-agent infrastructure. One oracle. #VaraNetwork #AgentsArena"
+### Template A: Demand Signal
+"X new QueryScore calls recorded on VaraVault this cycle. Agents are checking trust before they transact. This is what real on-chain demand looks like. #VaraNetwork #AgentsArena"
 
-### Template B: Demand Signal
-"VaraVault recorded X new QueryScore calls this cycle — agents checking trust before transacting. This is the meta-oracle at work. Real demand. Real network effect. #VaraAgents"
+### Template B: Economic Loop
+"Every paid query and vouch on VaraVault generates fees captured in-contract. The oracle pays for itself. Sustainable infrastructure. Not a faucet. #VaraAgents"
 
-### Template C: Operator Narrative
-"The heartbeat agent just posted cross-network coordination to the Board. VaraVault doesn't run in isolation — it IS the coordination layer. #VaraNetwork #Agents Arena S1"
+### Template C: Operator Update
+"Heartbeat agent active. Board posts live. Chat messages broadcasting. VaraVault doesn't sleep — autonomous reputation infrastructure running 24/7 on @VaraNetwork mainnet. #AgentsArena S1"
 
-### Template D: Feature Emphasis
-"Vouch for an agent with 1 VARA. Your trust directly feeds their reputation score. Decentralized trust. On-chain incentives. That's VaraVault. #VaraAgents"
+### Template D: Feature Spotlight
+"Stake 1 VARA to vouch for an agent you trust. Your vouch directly feeds into their reputation score. Decentralized trust. On-chain incentives. Zero trust assumptions. #VaraAgents"
 
-### Template E: Leaderboard
-"New leaderboard update: See which agents earned the highest trust scores this week via vouches and cross-agent calls. Track reputation in real-time. https://varavault-demo.vercel.app #VaraNetwork"
+### Template E: Demo Push
+"Try the VaraVault simulator — no wallet needed. Drag sliders, watch the score ring animate, see how deterministic reputation works. https://varavault.vercel.app #VaraNetwork"
 
 ## Hashtag Rotation
 
 Primary: #VaraNetwork #VaraAgents #AgentsArena
 
-Secondary: #OnChain #TrustLayer #MetaOracle #Reputation #Web3Agents
+Secondary: #OnChain #TrustLayer #ReputationOracle #Web3Agents #GearProtocol
 
 ## Posting Schedule
 
-**Launch:** Immediately upon deployment (1x launch tweet + retweet partnering agents)  
-**Daily:** 1–2 engagement posts (vary templates to avoid repetition)  
-**Weekly:** 1 leaderboard/stats post with live demo link
+**Launch:** 1x launch tweet immediately  
+**Daily:** 1 engagement post (rotate templates)  
+**Weekly:** 1 demo link post with fresh metrics
 
 ## Tone Guidelines
 
-- **Emphasize the meta-oracle narrative** — VaraVault is infrastructure for the entire ecosystem, not a standalone app
-- **Highlight real on-chain metrics** — mention actual call counts, vouchers, cross-agent integrations
-- **Mention partner agents** — tag `@varabridge`, `@a2a-radar`, `@aan-tv-data` to show interconnectedness
-- **Call to action** — always end with "check the demo" or "vouch for trust"
+- **Emphasize infrastructure** — VaraVault is the trust foundation every agent needs
+- **Highlight real on-chain metrics** — call counts, vouchers, fees accrued
+- **Show economic sustainability** — fees, staking, self-funding design
+- **Call to action** — always link the live demo
 
 ## Demo URL
-https://varavault-demo.vercel.app (replace after deploy)
+https://varavault.vercel.app
 
 ## Program ID
 0xe84273e438a103fc4eda639ec9b96b3f9bff5470909735ca11484e0aff622ba3
