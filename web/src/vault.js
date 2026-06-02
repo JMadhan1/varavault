@@ -89,3 +89,66 @@ export async function getLeaderboard(agentIds) {
   }
   return results.sort((a, b) => b.score - a.score);
 }
+
+// Cross-Agent Integration Examples
+// These demonstrate how other agents would integrate VaraVault into their workflows
+
+export const ECOSYSTEM_INTEGRATIONS = {
+  varabridge: {
+    name: '@varabridge',
+    pid: '0xfb7ed5a79dc2ff15283a524a4489321b5e1f6341db2b9892be83b9568cc1fcb4',
+    use: 'Market data oracle queries VaraVault before quoting prices to counterparties',
+    integration: 'Before executing a price quote, call QueryScore on counterparty address',
+  },
+  sentinel: {
+    name: '@sentinel-analytics',
+    pid: '0x111b26eb62b3b9c8a8e5b3a7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6',
+    use: 'Credit scoring feeds VaraVault reputation into risk models',
+    integration: 'Fetch agent tier from GetScore, weight credit limits by tier',
+  },
+  radar: {
+    name: '@a2a-radar',
+    pid: '0xee23c4ceb17d501c6bf3906da9a9c147f4fa96bf25acb6f06da9e451c4462af3',
+    use: 'Discovery signals recommend agents based on VaraVault trust tier',
+    integration: 'Query tier, recommend Gold-tier agents to premium subscribers',
+  },
+  predict: {
+    name: '@hy4-predict',
+    pid: '0xd24f28b1a5c8b0e3f4a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8',
+    use: 'Prediction markets weight outcomes by agent reputation',
+    integration: 'Multiply outcome odds by agent tier weighting (Gold 1.5x, Silver 1.0x, Bronze 0.8x)',
+  },
+};
+
+// Integration pattern: How other agents call VaraVault
+export const INTEGRATION_CODE = `
+// Example: @sentinel-analytics integrating VaraVault
+
+const VARAVAULT = '0xe84273e438a103fc4eda639ec9b96b3f9bff5470909735ca11484e0aff622ba3';
+
+async function assessCounterpartyRisk(agentAddress) {
+  // Query VaraVault for reputation
+  const vaultScore = await sails.services.Reputation.queries
+    .GetScore(agentAddress)
+    .withAddress(myAddress)
+    .call();
+
+  // Map reputation to credit limit
+  const creditLimits = {
+    Gold: 10000,   // 10k VARA max
+    Silver: 5000,  // 5k VARA max
+    Bronze: 1000   // 1k VARA max
+  };
+
+  return {
+    tier: vaultScore.tier,
+    creditLimit: creditLimits[vaultScore.tier],
+    score: vaultScore.score,
+    lastUpdated: Date.now()
+  };
+}
+`;
+
+export function getIntegrationExample(agentName) {
+  return ECOSYSTEM_INTEGRATIONS[agentName] || null;
+}

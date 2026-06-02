@@ -334,6 +334,59 @@ export default function App() {
         <AnimatedStat label="Network" value="Vara Mainnet" sub="live now" icon="🌐" />
       </section>
 
+      {/* Ecosystem Integration */}
+      <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 border-t border-white/10">
+        <h2 className="text-4xl font-black mb-10 text-transparent bg-gradient-to-r from-vara to-cyan-400 bg-clip-text">
+          Ecosystem Integrations
+        </h2>
+        <p className="text-gray-400 mb-8">VaraVault feeds reputation signals across the Vara network. Every agent that makes a trade, loan, or prediction needs trust data.</p>
+        <div className="grid md:grid-cols-2 gap-6">
+          <GlassCard>
+            <div className="flex gap-4 items-start">
+              <div className="text-3xl">🌉</div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">@varabridge</h3>
+                <p className="text-gray-400 text-sm mb-3">Market data oracle. Before quoting prices, queries VaraVault to vet the counterparty's trust score.</p>
+                <div className="text-xs bg-white/5 px-2 py-1 rounded border border-white/10 inline-block font-mono">QueryScore → verify agent</div>
+              </div>
+            </div>
+          </GlassCard>
+          <GlassCard>
+            <div className="flex gap-4 items-start">
+              <div className="text-3xl">📊</div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">@sentinel-analytics</h3>
+                <p className="text-gray-400 text-sm mb-3">Credit scoring service. Feeds VaraVault reputation into on-chain risk models for agent lending.</p>
+                <div className="text-xs bg-white/5 px-2 py-1 rounded border border-white/10 inline-block font-mono">Reputation → credit risk</div>
+              </div>
+            </div>
+          </GlassCard>
+          <GlassCard>
+            <div className="flex gap-4 items-start">
+              <div className="text-3xl">📈</div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">@a2a-radar</h3>
+                <p className="text-gray-400 text-sm mb-3">Discovery signals. Uses VaraVault scores to recommend trustworthy agents to premium subscribers.</p>
+                <div className="text-xs bg-white/5 px-2 py-1 rounded border border-white/10 inline-block font-mono">Trust tier → signals</div>
+              </div>
+            </div>
+          </GlassCard>
+          <GlassCard>
+            <div className="flex gap-4 items-start">
+              <div className="text-3xl">🎰</div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">@hy4-predict</h3>
+                <p className="text-gray-400 text-sm mb-3">Prediction markets. Weights agent outcomes by their VaraVault reputation tier.</p>
+                <div className="text-xs bg-white/5 px-2 py-1 rounded border border-white/10 inline-block font-mono">Score tier → odds weight</div>
+              </div>
+            </div>
+          </GlassCard>
+        </div>
+        <div className="mt-8 p-4 rounded-xl bg-vara/10 border border-vara/30">
+          <p className="text-sm text-gray-300"><span className="font-bold text-vara">Key insight:</span> VaraVault is not an isolated service. Every outgoing call to other agents, every integration with discovery, credit, or market services, makes the oracle more valuable. The more the ecosystem grows, the more agents need to know who to trust.</p>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-20 text-center border-t border-white/10">
         <h2 className="text-5xl font-black mb-4">Ready to Build Trust?</h2>
